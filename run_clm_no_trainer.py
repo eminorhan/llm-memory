@@ -51,12 +51,9 @@ from transformers import (
     default_data_collator,
     get_scheduler,
 )
-from transformers.utils import check_min_version, get_full_repo_name, send_example_telemetry
+from transformers.utils import get_full_repo_name, send_example_telemetry
 from transformers.utils.versions import require_version
 
-
-# Will error if the minimal version of Transformers is not installed. Remove at your own risks.
-# check_min_version("4.23.0.dev0")
 
 logger = get_logger(__name__)
 
@@ -79,9 +76,9 @@ def parse_args():
     parser.add_argument("--use_slow_tokenizer", action="store_true", help="If passed, will use a slow tokenizer (not backed by the 🤗 Tokenizers library).")
     parser.add_argument("--per_device_train_batch_size", type=int, default=8, help="Batch size (per device) for the training dataloader.")
     parser.add_argument("--per_device_eval_batch_size", type=int, default=8, help="Batch size (per device) for the evaluation dataloader.")
-    parser.add_argument("--learning_rate", type=float, default=5e-5, help="Initial learning rate (after the potential warmup period) to use.")
+    parser.add_argument("--learning_rate", type=float, default=5e-4, help="Initial learning rate (after the potential warmup period) to use.")
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
-    parser.add_argument("--num_train_epochs", type=int, default=3, help="Total number of training epochs to perform.")
+    parser.add_argument("--num_train_epochs", type=int, default=1, help="Total number of training epochs to perform.")
     parser.add_argument("--max_train_steps", type=int, default=None, help="Total number of training steps to perform. If provided, overrides num_train_epochs.")
     parser.add_argument("--gradient_accumulation_steps", type=int, default=1, help="Number of updates steps to accumulate before performing a backward/update pass.")
     parser.add_argument("--lr_scheduler_type", type=SchedulerType, default="linear", help="The scheduler type to use.",
@@ -278,6 +275,7 @@ def main():
     # First we tokenize all the texts.
     column_names = raw_datasets["train"].column_names
     text_column_name = "text" if "text" in column_names else column_names[0]
+    print("TEXT COLUMN NAME:", text_column_name)
 
     def tokenize_function(examples):
         return tokenizer(examples[text_column_name])
@@ -299,28 +297,29 @@ def main():
                 f"The tokenizer picked seems to have a very large `model_max_length` ({tokenizer.model_max_length}). "
                 "Picking 1024 instead. You can change that default value by passing --block_size xxx."
             )
-        block_size = 1024
+            block_size = 1024
     else:
         if args.block_size > tokenizer.model_max_length:
             logger.warning(
                 f"The block_size passed ({args.block_size}) is larger than the maximum length for the model"
                 f"({tokenizer.model_max_length}). Using block_size={tokenizer.model_max_length}."
             )
-        block_size = min(args.block_size, tokenizer.model_max_length)
+            block_size = tokenizer.model_max_length
 
     # Main data processing function that will concatenate all texts from our dataset and generate chunks of block_size.
     def group_texts(examples):
         # Concatenate all texts.
         concatenated_examples = {k: list(chain(*examples[k])) for k in examples.keys()}
         total_length = len(concatenated_examples[list(examples.keys())[0]])
+        
         # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
         # customize this part to your needs.
         if total_length >= block_size:
             total_length = (total_length // block_size) * block_size
+        
         # Split by chunks of max_len.
         result = {
-            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
-            for k, t in concatenated_examples.items()
+            k: [t[i : i + block_size] for i in range(0, total_length, block_size)] for k, t in concatenated_examples.items()
         }
         result["labels"] = result["input_ids"].copy()
         return result
@@ -332,9 +331,13 @@ def main():
     # To speed up this part, we use multiprocessing. See the documentation of the map method for more information:
     # https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.map
 
+    def preprocess_function(examples):
+        examples["labels"] = examples["input_ids"].copy()
+        return examples
+
     with accelerator.main_process_first():
         lm_datasets = tokenized_datasets.map(
-            group_texts,
+            preprocess_function,
             batched=True,
             num_proc=args.preprocessing_num_workers,
             load_from_cache_file=not args.overwrite_cache,
@@ -347,6 +350,7 @@ def main():
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
         logger.info(f"Sample {index} of the training set: {train_dataset[index]}.")
+        logger.info(f"Sample {index} of the training set (decoded): {tokenizer.decode(train_dataset[index]['input_ids'])}.")
 
     # DataLoaders creation:
     train_dataloader = DataLoader(train_dataset, shuffle=True, collate_fn=default_data_collator, batch_size=args.per_device_train_batch_size)
@@ -394,6 +398,7 @@ def main():
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
     if overrode_max_train_steps:
         args.max_train_steps = args.num_train_epochs * num_update_steps_per_epoch
+
     # Afterwards we recalculate our number of training epochs
     args.num_train_epochs = math.ceil(args.max_train_steps / num_update_steps_per_epoch)
 

@@ -12,7 +12,8 @@ module purge
 module load cuda/11.3.1
 
 python run_clm_no_trainer.py \
+    --model_name_or_path facebook/opt-125m \
     --train_file data.json \
     --per_device_train_batch_size 1 \
-    --model_name_or_path facebook/opt-125m \
+    --num_train_epochs 1 \
     --output_dir /tmp/test-clm
