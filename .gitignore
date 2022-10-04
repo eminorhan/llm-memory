@@ -1,0 +1,13 @@
+# File extensions
+*.pt
+*.pth
+*.ckpt
+*.jpeg
+*.tar
+*.npz
+*.lock
+*.bin
+
+# Directories
+/tmp*
+**/__pycache__/

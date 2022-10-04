@@ -11,9 +11,11 @@
 module purge
 module load cuda/11.3.1
 
-python run_clm_no_trainer.py \
+python -u /scratch/eo41/lm-recognition-memory/run_clm_no_trainer.py \
     --model_name_or_path facebook/opt-125m \
     --train_file data.json \
-    --per_device_train_batch_size 1 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
     --num_train_epochs 1 \
-    --output_dir /tmp/test-clm
+    --output_dir /scratch/eo41/lm-recognition-memory/tmp/test-clm \
+    --overwrite_cache
