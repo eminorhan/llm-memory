@@ -2,8 +2,15 @@ import time
 import requests
 import jsonlines
 from bs4 import BeautifulSoup
+from nltk.tokenize import sent_tokenize
 
-URL = [
+URL = ['https://astralcodexten.substack.com/p/a-columbian-exchange',
+       'https://astralcodexten.substack.com/p/how-trustworthy-are-supplements',
+       'https://astralcodexten.substack.com/p/chai-assistance-games-and-fully-updated',
+       'https://astralcodexten.substack.com/p/universe-hopping-through-substack',
+       'https://astralcodexten.substack.com/p/from-nostradamus-to-fukuyama',
+       'https://astralcodexten.substack.com/p/why-is-the-central-valley-so-bad',
+       'https://astralcodexten.substack.com/p/janus-gpt-wrangling',
        'https://astralcodexten.substack.com/p/unpredictable-reward-predictable',
        'https://astralcodexten.substack.com/p/i-won-my-three-year-ai-progress-bet',
        'https://astralcodexten.substack.com/p/links-for-september-2022',
@@ -29,6 +36,9 @@ URL = [
        'https://astralcodexten.substack.com/p/forer-statements-as-updates-and-affirmations',
        'https://astralcodexten.substack.com/p/elk-and-the-problem-of-truthful-ai',
        'https://astralcodexten.substack.com/p/your-book-review-the-society-of-the',
+       'https://fakenous.substack.com/p/does-history-cause-racism',
+       'https://fakenous.substack.com/p/is-critical-thinking-epistemically',
+       'https://fakenous.substack.com/p/is-this-racism',
        'https://fakenous.substack.com/p/americas-unjust-drug-war',
        'https://fakenous.substack.com/p/immoral-rulers',
        'https://fakenous.substack.com/p/sense-data',
@@ -54,6 +64,15 @@ URL = [
        'https://fakenous.substack.com/p/why-we-cancel',
        'https://fakenous.substack.com/p/the-problem-of-memory-knowledge',
        'https://fakenous.substack.com/p/why-we-love-evil-ideas',
+       'https://betonit.substack.com/p/aaronson-on-feminism-my-reply',
+       'https://betonit.substack.com/p/open-borders-is-a-fine-slogan',
+       'https://betonit.substack.com/p/the-definition-of-feminism',
+       'https://betonit.substack.com/p/rothbard-contra-the-demagogue',
+       'https://betonit.substack.com/p/fear-of-feminism',
+       'https://betonit.substack.com/p/safety-in-numbers-why-student-loan',
+       'https://betonit.substack.com/p/reflections-on-the-caplan-singer',
+       'https://betonit.substack.com/p/tyler-on-feminism-my-reply',
+       'https://betonit.substack.com/p/dont-be-a-feminist-the-origin-story',
        'https://betonit.substack.com/p/the-caplan-singer-debate-my-opening',
        'https://betonit.substack.com/p/dont-be-a-feminist-highlights',
        'https://betonit.substack.com/p/judge-this-book-by-its-cover',
@@ -78,7 +97,45 @@ URL = [
        'https://betonit.substack.com/p/the-united-states-party-central',
        'https://betonit.substack.com/p/inflation-for-merit',
        'https://betonit.substack.com/p/starting-iunbeatablei',
-       'https://betonit.substack.com/p/reflections-on-italian-migration'
+       'https://betonit.substack.com/p/reflections-on-italian-migration',
+       'https://rychappell.substack.com/p/when-metaethics-matters',
+       'https://rychappell.substack.com/p/a-multiplicative-model-of-value-pluralism',
+       'https://rychappell.substack.com/p/pick-some-low-hanging-fruit',
+       'https://rychappell.substack.com/p/puzzles-for-everyone',
+       'https://rychappell.substack.com/p/how-useful-is-utilitarianism',
+       'https://rychappell.substack.com/p/the-nietzschean-challenge-to-effective',
+       'https://rychappell.substack.com/p/ethically-alien-thought-experiments',
+       'https://rychappell.substack.com/p/utilitarianism-and-abortion',
+       'https://rychappell.substack.com/p/review-of-what-we-owe-the-future',
+       'https://rychappell.substack.com/p/billionaire-philanthropy',
+       'https://rychappell.substack.com/p/double-or-nothing-existence-gambles',
+       'https://rychappell.substack.com/p/constraints-and-candy',
+       'https://rychappell.substack.com/p/ethics-as-solutions-vs-constraints',
+       'https://rychappell.substack.com/p/is-non-consequentialism-self-effacing',
+       'https://rychappell.substack.com/p/the-fine-tuning-god-problem',
+       'https://rychappell.substack.com/p/meat-externalities',
+       'https://rychappell.substack.com/p/caplans-conscience-objection-to-utilitarianism',
+       'https://rychappell.substack.com/p/agency-and-epistemic-cheems-mindset',
+       'https://rychappell.substack.com/p/buddhism-and-utilitarianism',
+       'https://rychappell.substack.com/p/consequentialism-beyond-action',
+       'https://rychappell.substack.com/p/emergency-ethics',
+       'https://rychappell.substack.com/p/the-strange-shortage-of-moral-optimizers',
+       'https://rychappell.substack.com/p/moral-truth-without-substance',
+       'https://rychappell.substack.com/p/deontic-pluralism',
+       'https://rychappell.substack.com/p/the-birth-of-population-ethics',
+       'https://rychappell.substack.com/p/do-you-really-exist-over-time',
+       'https://rychappell.substack.com/p/parfits-triple-theory',
+       'https://rychappell.substack.com/p/level-up-impartiality',
+       'https://rychappell.substack.com/p/rational-irrationality-and-blameless',
+       'https://rychappell.substack.com/p/utilitarianism-and-the-personal-perspective',
+       'https://rychappell.substack.com/p/priority-and-aggregation',
+       'https://rychappell.substack.com/p/how-utilitarians-value-individuals',
+       'https://rychappell.substack.com/p/against-egoism-and-subjectivism',
+       'https://rychappell.substack.com/p/theory-driven-applied-ethics',
+       'https://rychappell.substack.com/p/beneficentrism',
+       'https://rychappell.substack.com/p/beware-status-quo-risks',
+       'https://rychappell.substack.com/p/utilitarianism-and-reflective-equilibrium',
+       'https://rychappell.substack.com/p/utilitarianism-debate-with-michael'
        ]
 
 data = []
@@ -93,10 +150,14 @@ for url in URL:
        s = soup.find('div', class_='available-content')
        lines = s.find_all('p')
        for line in lines:
-              # remove short texts
-              if len(line.text) > 50:
-                     data.append({"par": line.text, "par_id": par_id, "url_id": url_id})
-                     par_id += 1
+              # remove short texts (pars)
+              if len(line.text) > 100:
+                     sentences = sent_tokenize(line.text)
+                     for sent in sentences:
+                            # remove short sentences
+                            if len(sent) > 100:
+                                   data.append({"sent": sent, "sent_id": par_id, "url_id": url_id})
+                                   par_id += 1
        url_id += 1
 
 # write to jsonl file
