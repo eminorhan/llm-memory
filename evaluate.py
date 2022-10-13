@@ -61,6 +61,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate recognition memory in large language models")
     parser.add_argument("--seen_file", type=str, default=None, help="A csv or a json file containing the seen examples.")
     parser.add_argument("--unseen_file", type=str, default=None, help="A csv or a json file containing the unseen examples.")
+    parser.add_argument("--save_prefix", type=str, default='', help="Informative string for saving purposes")
 
     parser.add_argument("--model_name_or_path", type=str, help="Path to pretrained model or model identifier from huggingface.co/models.", required=False)
     parser.add_argument("--config_name", type=str, default=None, help="Pretrained config name or path if not the same as model_name")
@@ -279,13 +280,8 @@ def main():
     logger.info(f"Mean accuracy: {mean_accuracy}")
 
     # save results (TODO: change the file name)
-    with open(os.path.join(args.output_dir, "all_results.json"), "w") as f:
-        json.dump({
-            "seen_losses": seen_losses, 
-            "unseen_losses": unseen_losses,
-            "accuracies": accuracies,
-            "mean_accuracy": mean_accuracy
-            }, f)
+    save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
+    np.savez(save_path, seen_losses=seen_losses, unseen_losses=unseen_losses, accuracies=accuracies, mean_accuracy=mean_accuracy)
 
 if __name__ == "__main__":
     main()
