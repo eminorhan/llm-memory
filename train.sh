@@ -13,10 +13,12 @@ module load cuda/11.3.1
 
 python -u /scratch/eo41/lm-recognition-memory/train.py \
     --model_name_or_path facebook/opt-125m \
-    --train_file /scratch/eo41/lm-recognition-memory/data/seen_data_0.json \
+    --train_file /scratch/eo41/lm-recognition-memory/cnn_dailymail_test.json \
     --per_device_train_batch_size 1 \
     --num_train_epochs 1 \
     --output_dir /scratch/eo41/lm-recognition-memory/tmp/test-clm \
-    --overwrite_cache
+    --checkpointing_steps 100 \
+    --block_size 128 \
+    --overwrite_cache 
     
 echo "Done"    

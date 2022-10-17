@@ -22,7 +22,6 @@ https://huggingface.co/models?filter=text-generation
 # You can also adapt this script on your own causal language modeling task. Pointers for this are left as comments.
 
 import argparse
-import json
 import logging
 import math
 import os
@@ -30,6 +29,7 @@ import random
 
 import datasets
 import torch
+import numpy as np
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
@@ -86,7 +86,6 @@ def parse_args():
     parser.add_argument("--no_keep_linebreaks", action="store_true", help="Do not keep line breaks when using TXT files.")
     parser.add_argument("--checkpointing_steps", type=str, default=None, help="Whether the various states should be saved at the end of every n steps, or 'epoch' for each epoch.")
     parser.add_argument("--resume_from_checkpoint", type=str, default=None, help="If the training should continue from a checkpoint folder.")
-    parser.add_argument("--with_tracking", action="store_true", help="Whether to enable experiment trackers for logging.")
     args = parser.parse_args()
 
     # Sanity checks
@@ -103,11 +102,8 @@ def parse_args():
 def main():
     args = parse_args()
 
-    # Initialize the accelerator with tracking. We let the accelerator handle device placement for us.
-    accelerator_log_kwargs = {}
-    if args.with_tracking:
-        accelerator_log_kwargs["logging_dir"] = args.output_dir
-    accelerator = Accelerator(gradient_accumulation_steps=args.gradient_accumulation_steps, **accelerator_log_kwargs)
+    # Initialize the accelerator
+    accelerator = Accelerator(gradient_accumulation_steps=args.gradient_accumulation_steps)
 
     # Make one log on every process with the configuration for debugging.
     logging.basicConfig(
@@ -201,6 +197,7 @@ def main():
             )
             block_size = 1024
     else:
+        block_size = args.block_size
         if args.block_size > tokenizer.model_max_length:
             logger.warning(
                 f"The block_size passed ({args.block_size}) is larger than the maximum length for the model"
@@ -281,11 +278,6 @@ def main():
     if checkpointing_steps is not None and checkpointing_steps.isdigit():
         checkpointing_steps = int(checkpointing_steps)
 
-    # We need to initialize the trackers we use, and also store our configuration.
-    if args.with_tracking:
-        experiment_config = vars(args)
-        accelerator.init_trackers("train", experiment_config)
-
     # Train!
     total_batch_size = args.per_device_train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
 
@@ -329,10 +321,10 @@ def main():
     progress_bar.update(starting_epoch * num_update_steps_per_epoch)
     completed_steps = starting_epoch * num_update_steps_per_epoch
 
+    train_losses = []
+
     for epoch in range(starting_epoch, args.num_train_epochs):
         model.train()
-        if args.with_tracking:
-            total_loss = 0
         for step, batch in enumerate(train_dataloader):
             # We need to skip steps until we reach the resumed step
             if args.resume_from_checkpoint and epoch == starting_epoch:
@@ -345,9 +337,8 @@ def main():
             with accelerator.accumulate(model):
                 outputs = model(**batch)
                 loss = outputs.loss
-                # We keep track of the loss at each epoch
-                if args.with_tracking:
-                    total_loss += loss.detach().float()
+                # keep track of the loss at each epoch
+                train_losses.append(loss.detach())
                 accelerator.backward(loss)
                 optimizer.step()
                 optimizer.zero_grad()
@@ -364,27 +355,22 @@ def main():
                         output_dir = os.path.join(args.output_dir, output_dir)
                     accelerator.save_state(output_dir)
 
+                    # save train_losses
+                    print(train_losses)
+                    train_losses_ckpt = torch.cat(train_losses)
+                    train_losses_ckpt = train_losses_ckpt.cpu().numpy()
+
+                    save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
+                    np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
+
             if completed_steps >= args.max_train_steps:
                 break
-
-        if args.with_tracking:
-            accelerator.log(
-                {
-                    "train_loss": total_loss.item() / len(train_dataloader),
-                    "epoch": epoch,
-                    "step": completed_steps,
-                },
-                step=completed_steps,
-            )
 
         if args.checkpointing_steps == "epoch":
             output_dir = f"epoch_{epoch}"
             if args.output_dir is not None:
                 output_dir = os.path.join(args.output_dir, output_dir)
             accelerator.save_state(output_dir)
-
-    if args.with_tracking:
-        accelerator.end_training()
 
     if args.output_dir is not None:
         accelerator.wait_for_everyone()

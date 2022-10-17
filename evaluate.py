@@ -22,7 +22,6 @@ https://huggingface.co/models?filter=text-generation
 # You can also adapt this script on your own causal language modeling task. Pointers for this are left as comments.
 
 import argparse
-import json
 import logging
 import os
 import random
@@ -45,7 +44,6 @@ from transformers import (
     AutoTokenizer,
     default_data_collator,
 )
-from transformers.utils import send_example_telemetry
 from transformers.utils.versions import require_version
 
 
