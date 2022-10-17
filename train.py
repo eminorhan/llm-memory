@@ -86,6 +86,8 @@ def parse_args():
     parser.add_argument("--no_keep_linebreaks", action="store_true", help="Do not keep line breaks when using TXT files.")
     parser.add_argument("--checkpointing_steps", type=str, default=None, help="Whether the various states should be saved at the end of every n steps, or 'epoch' for each epoch.")
     parser.add_argument("--resume_from_checkpoint", type=str, default=None, help="If the training should continue from a checkpoint folder.")
+    parser.add_argument("--save_prefix", type=str, default='', help="Informative string prefix for saving purposes.")
+
     args = parser.parse_args()
 
     # Sanity checks
@@ -338,7 +340,7 @@ def main():
                 outputs = model(**batch)
                 loss = outputs.loss
                 # keep track of the loss at each epoch
-                train_losses.append(loss.detach())
+                train_losses.append(loss.detach().unsqueeze(0))
                 accelerator.backward(loss)
                 optimizer.step()
                 optimizer.zero_grad()
@@ -356,11 +358,11 @@ def main():
                     accelerator.save_state(output_dir)
 
                     # save train_losses
-                    print(train_losses)
                     train_losses_ckpt = torch.cat(train_losses)
                     train_losses_ckpt = train_losses_ckpt.cpu().numpy()
+                    print('Mean train loss:', np.mean(train_losses_ckpt))
 
-                    save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
+                    save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
                     np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
 
             if completed_steps >= args.max_train_steps:

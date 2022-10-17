@@ -17,8 +17,9 @@ python -u /scratch/eo41/lm-recognition-memory/train.py \
     --per_device_train_batch_size 1 \
     --num_train_epochs 1 \
     --output_dir /scratch/eo41/lm-recognition-memory/tmp/test-clm \
-    --checkpointing_steps 100 \
+    --checkpointing_steps 10000 \
     --block_size 128 \
+    --save_prefix 'cnn_test_opt125m'
     --overwrite_cache 
     
 echo "Done"    
