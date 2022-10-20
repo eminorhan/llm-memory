@@ -67,7 +67,7 @@ def parse_args():
     parser.add_argument("--tokenizer_name", type=str, default=None, help="Pretrained tokenizer name or path if not the same as model_name")
     parser.add_argument("--use_slow_tokenizer", action="store_true", help="If passed, will use a slow tokenizer (not backed by the 🤗 Tokenizers library).")
     parser.add_argument("--per_device_train_batch_size", type=int, default=8, help="Batch size (per device) for the training dataloader.")
-    parser.add_argument("--learning_rate", type=float, default=5e-4, help="Initial learning rate (after the potential warmup period) to use.")
+    parser.add_argument("--learning_rate", type=float, default=0.0001, help="Initial learning rate (after the potential warmup period) to use.")
     parser.add_argument("--weight_decay", type=float, default=0.0, help="Weight decay to use.")
     parser.add_argument("--num_train_epochs", type=int, default=1, help="Total number of training epochs to perform.")
     parser.add_argument("--max_train_steps", type=int, default=None, help="Total number of training steps to perform. If provided, overrides num_train_epochs.")
@@ -75,12 +75,7 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default=None, help="Where to store the final model.")
     parser.add_argument("--seed", type=int, default=None, help="A seed for reproducible training.")
     parser.add_argument("--model_type", type=str, default=None, help="Model type to use if training from scratch.", choices=MODEL_TYPES)
-    parser.add_argument("--block_size", type=int, default=None,
-        help=(
-            "Optional input sequence length after tokenization. The training dataset will be truncated in block of this size for training. " 
-            "Default to the model max input length for single sentence inputs (take into account special tokens)."
-        ),
-    )
+    parser.add_argument("--block_size", type=int, default=None, help="The training dataset will be truncated to blocks of this size (after tokenization) for training.")
     parser.add_argument("--preprocessing_num_workers", type=int, default=None, help="The number of processes to use for the preprocessing.")
     parser.add_argument("--overwrite_cache", action="store_true", help="Overwrite the cached training and evaluation sets")
     parser.add_argument("--no_keep_linebreaks", action="store_true", help="Do not keep line breaks when using TXT files.")
@@ -106,7 +101,7 @@ def main():
 
     # Initialize the accelerator
     accelerator = Accelerator(gradient_accumulation_steps=args.gradient_accumulation_steps)
-
+    
     # Make one log on every process with the configuration for debugging.
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
@@ -244,6 +239,8 @@ def main():
         logger.info(f"Sample {index} of the training set: {train_dataset[index]}.")
         logger.info(f"Sample {index} of the training set (decoded): {tokenizer.decode(train_dataset[index]['input_ids'], skip_special_tokens=True)}.")
 
+    model = accelerator.prepare(model)
+    
     # Optimizer
     # Split weights in two groups, one with weight decay and the other not.
     no_decay = ["bias", "layer_norm.weight"]
@@ -261,7 +258,7 @@ def main():
         overrode_max_train_steps = True
 
     # Prepare everything with our `accelerator`.
-    model, optimizer, train_dataloader = accelerator.prepare(model, optimizer, train_dataloader)
+    optimizer, train_dataloader = accelerator.prepare(optimizer, train_dataloader)
 
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
@@ -373,6 +370,14 @@ def main():
             if args.output_dir is not None:
                 output_dir = os.path.join(args.output_dir, output_dir)
             accelerator.save_state(output_dir)
+
+            # save train_losses
+            train_losses_ckpt = torch.cat(train_losses)
+            train_losses_ckpt = train_losses_ckpt.cpu().numpy()
+            print('Mean train loss:', np.mean(train_losses_ckpt))
+
+            save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
+            np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
 
     if args.output_dir is not None:
         accelerator.wait_for_everyone()

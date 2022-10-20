@@ -60,7 +60,6 @@ def parse_args():
     parser.add_argument("--seen_file", type=str, default=None, help="A csv or a json file containing the seen examples.")
     parser.add_argument("--unseen_file", type=str, default=None, help="A csv or a json file containing the unseen examples.")
     parser.add_argument("--save_prefix", type=str, default='', help="Informative string for saving purposes")
-
     parser.add_argument("--model_name_or_path", type=str, help="Path to pretrained model or model identifier from huggingface.co/models.", required=False)
     parser.add_argument("--config_name", type=str, default=None, help="Pretrained config name or path if not the same as model_name")
     parser.add_argument("--tokenizer_name", type=str, default=None, help="Pretrained tokenizer name or path if not the same as model_name")
@@ -69,13 +68,7 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default=None, help="Where to store the final model.")
     parser.add_argument("--seed", type=int, default=None, help="A seed for reproducible training.")
     parser.add_argument("--model_type", type=str, default=None, help="Model type to use if training from scratch.", choices=MODEL_TYPES)
-    parser.add_argument("--block_size", type=int, default=None,
-        help=(
-            "Optional input sequence length after tokenization. The training dataset will be truncated in block of"
-            " this size for training. Default to the model max input length for single sentence inputs (take into"
-            " account special tokens)."
-        ),
-    )
+    parser.add_argument("--block_size", type=int, default=None, help="The training dataset will be truncated to blocks of this size (after tokenization) for training.")
     parser.add_argument("--preprocessing_num_workers", type=int, default=None, help="The number of processes to use for the preprocessing.")
     parser.add_argument("--overwrite_cache", action="store_true", help="Overwrite the cached training and evaluation sets")
     parser.add_argument("--no_keep_linebreaks", action="store_true", help="Do not keep line breaks when using TXT files.")
@@ -183,6 +176,7 @@ def main():
             )
             block_size = 1024
     else:
+        block_size = args.block_size
         if args.block_size > tokenizer.model_max_length:
             logger.warning(
                 f"The block_size passed ({args.block_size}) is larger than the maximum length for the model"

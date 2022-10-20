@@ -9,5 +9,5 @@
 *.bin
 
 # Directories
-/tmp*
+/models
 **/__pycache__/
