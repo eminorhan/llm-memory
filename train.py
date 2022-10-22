@@ -357,7 +357,7 @@ def main():
                     # save train_losses
                     train_losses_ckpt = torch.cat(train_losses)
                     train_losses_ckpt = train_losses_ckpt.cpu().numpy()
-                    print('Mean train loss:', np.mean(train_losses_ckpt))
+                    logger.info(f"Mean train loss: {np.mean(train_losses_ckpt)}")
 
                     save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
                     np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
@@ -374,7 +374,7 @@ def main():
             # save train_losses
             train_losses_ckpt = torch.cat(train_losses)
             train_losses_ckpt = train_losses_ckpt.cpu().numpy()
-            print('Mean train loss:', np.mean(train_losses_ckpt))
+            logger.info(f"Mean train loss: {np.mean(train_losses_ckpt)}")
 
             save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
             np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
@@ -385,6 +385,14 @@ def main():
         unwrapped_model.save_pretrained(args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save)
         if accelerator.is_main_process:
             tokenizer.save_pretrained(args.output_dir)
+
+        # save train_losses
+        train_losses_ckpt = torch.cat(train_losses)
+        train_losses_ckpt = train_losses_ckpt.cpu().numpy()
+        logger.info(f"Final mean train loss: {np.mean(train_losses_ckpt)}")
+
+        save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
+        np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
 
 
 if __name__ == "__main__":
