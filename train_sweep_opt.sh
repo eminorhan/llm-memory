@@ -15,92 +15,96 @@ EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0003 0.0001 0.00003 0.00001)
 BSS=(1 2 4 8)
 
+# OPT-2.7B
 MO="facebook/opt-2.7b"
 for EX in "${EXS[@]}"
 do
-	for LR in "${LRS[@]}"
-	do
-		for BS in "${BSS[@]}"
-		do
-			SP="opt_2.7b_${EX}_${LR}_${BS}"
-			python -u /scratch/eo41/lm-recognition-memory/train.py \
-			    --model_name_or_path $MO \
-			    --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
-			    --per_device_train_batch_size $BS \
-			    --learning_rate $LR \
-			    --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
-			    --save_prefix $SP \    
-			    --block_size 128 \
-			    --num_train_epochs 1 \
-			    --overwrite_cache
-		done
-	done
+    for LR in "${LRS[@]}"
+    do
+        for BS in "${BSS[@]}"
+        do
+            SP="opt_2.7b_${EX}_${LR}_${BS}"
+            python -u /scratch/eo41/lm-recognition-memory/train.py \
+                --model_name_or_path ${MO} \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --per_device_train_batch_size ${BS} \
+                --learning_rate ${LR} \
+                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --save_prefix ${SP} \
+                --block_size 128 \
+                --num_train_epochs 1 \
+                --overwrite_cache
+        done
+    done
 done
 
+# OPT-1.3B
 MO="facebook/opt-1.3b"
 for EX in "${EXS[@]}"
 do
-	for LR in "${LRS[@]}"
-	do
-		for BS in "${BSS[@]}"
-		do
-			SP="opt_1.3b_${EX}_${LR}_${BS}"
-			python -u /scratch/eo41/lm-recognition-memory/train.py \
-			    --model_name_or_path $MO \
-			    --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
-			    --per_device_train_batch_size $BS \
-			    --learning_rate $LR \
-			    --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
-			    --save_prefix $SP \    
-			    --block_size 128 \
-			    --num_train_epochs 1 \
-			    --overwrite_cache
-		done
-	done
+    for LR in "${LRS[@]}"
+    do
+        for BS in "${BSS[@]}"
+        do
+            SP="opt_1.3b_${EX}_${LR}_${BS}"
+            python -u /scratch/eo41/lm-recognition-memory/train.py \
+                --model_name_or_path ${MO} \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --per_device_train_batch_size ${BS} \
+                --learning_rate ${LR} \
+                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --save_prefix ${SP} \
+                --block_size 128 \
+                --num_train_epochs 1 \
+                --overwrite_cache
+        done
+    done
 done
 
+# OPT-350M
 MO="facebook/opt-350m"
 for EX in "${EXS[@]}"
 do
-	for LR in "${LRS[@]}"
-	do
-		for BS in "${BSS[@]}"
-		do
-			SP="opt_350m_${EX}_${LR}_${BS}"
-			python -u /scratch/eo41/lm-recognition-memory/train.py \
-			    --model_name_or_path $MO \
-			    --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
-			    --per_device_train_batch_size $BS \
-			    --learning_rate $LR \
-			    --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
-			    --save_prefix $SP \    
-			    --block_size 128 \
-			    --num_train_epochs 1 \
-			    --overwrite_cache
-		done
-	done
+    for LR in "${LRS[@]}"
+    do
+        for BS in "${BSS[@]}"
+        do
+            SP="opt_350m_${EX}_${LR}_${BS}"
+            python -u /scratch/eo41/lm-recognition-memory/train.py \
+                --model_name_or_path ${MO} \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --per_device_train_batch_size ${BS} \
+                --learning_rate ${LR} \
+                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --save_prefix ${SP} \
+                --block_size 128 \
+                --num_train_epochs 1 \
+                --overwrite_cache
+        done
+    done
 done
 
+# OPT-125M
 MO="facebook/opt-125m"
 for EX in "${EXS[@]}"
 do
-	for LR in "${LRS[@]}"
-	do
-		for BS in "${BSS[@]}"
-		do
-			SP="opt_125m_${EX}_${LR}_${BS}"
-			python -u /scratch/eo41/lm-recognition-memory/train.py \
-			    --model_name_or_path $MO \
-			    --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
-			    --per_device_train_batch_size $BS \
-			    --learning_rate $LR \
-			    --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
-			    --save_prefix $SP \    
-			    --block_size 128 \
-			    --num_train_epochs 1 \
-			    --overwrite_cache
-		done
-	done
+    for LR in "${LRS[@]}"
+    do
+        for BS in "${BSS[@]}"
+        do
+            SP="opt_125m_${EX}_${LR}_${BS}"
+            python -u /scratch/eo41/lm-recognition-memory/train.py \
+                --model_name_or_path ${MO} \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --per_device_train_batch_size ${BS} \
+                --learning_rate ${LR} \
+                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --save_prefix ${SP} \
+                --block_size 128 \
+                --num_train_epochs 1 \
+                --overwrite_cache
+        done
+    done
 done
 
-echo "Done"    
+echo "Done"
