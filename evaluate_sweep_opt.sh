@@ -11,7 +11,7 @@
 module purge
 module load cuda/11.6.2
 
-EXS=("data_0" "data_1" "data_2" "data_3")
+EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0003 0.0001 0.00003 0.00001)
 BSS=(1 2 4 8)
 
@@ -24,9 +24,9 @@ do
         do
             SP="opt_2.7b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path /scratch/eo41/lm-recognition-memory/models/${SP} \
-                --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
+                --model_name_or_path "models/${SP}" \
+                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/expt1" \
                 --save_prefix ${SP} \
@@ -45,9 +45,9 @@ do
         do
             SP="opt_1.3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path /scratch/eo41/lm-recognition-memory/models/${SP} \
-                --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
+                --model_name_or_path "models/${SP}" \
+                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/expt1" \
                 --save_prefix ${SP} \
@@ -66,9 +66,9 @@ do
         do
             SP="opt_350m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path /scratch/eo41/lm-recognition-memory/models/${SP} \
-                --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
+                --model_name_or_path "models/${SP}" \
+                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/expt1" \
                 --save_prefix ${SP} \
@@ -87,9 +87,9 @@ do
         do
             SP="opt_125m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path /scratch/eo41/lm-recognition-memory/models/${SP} \
-                --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
+                --model_name_or_path "models/${SP}" \
+                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/expt1" \
                 --save_prefix ${SP} \
