@@ -24,7 +24,7 @@ do
         do
             SP="opt_2.7b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "models/${SP}" \
+                --model_name_or_path "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
                 --per_device_eval_batch_size 1 \
@@ -45,7 +45,7 @@ do
         do
             SP="opt_1.3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "models/${SP}" \
+                --model_name_or_path "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
                 --per_device_eval_batch_size 1 \
@@ -66,7 +66,7 @@ do
         do
             SP="opt_350m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "models/${SP}" \
+                --model_name_or_path "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
                 --per_device_eval_batch_size 1 \
@@ -87,7 +87,7 @@ do
         do
             SP="opt_125m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "models/${SP}" \
+                --model_name_or_path "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/seen_${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/unseen_${EX}.json" \
                 --per_device_eval_batch_size 1 \
