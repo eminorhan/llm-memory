@@ -86,6 +86,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    print(args)
 
     # Initialize the accelerator
     accelerator = Accelerator()
@@ -221,8 +222,11 @@ def main():
         logger.info(f"Sample {index} of the seen set (decoded): {tokenizer.decode(seen_dataset[index]['input_ids'], skip_special_tokens=True)}.")
 
     # seen-unseen dataloaders
-    seen_dataloader = DataLoader(seen_dataset, shuffle=True, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
-    unseen_dataloader = DataLoader(unseen_dataset, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
+    seen_dataloader = DataLoader(seen_dataset, shuffle=False, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
+    unseen_dataloader = DataLoader(unseen_dataset, shuffle=False, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
+
+    # Prepare everything with our `accelerator`.
+    model, seen_dataloader, unseen_dataloader = accelerator.prepare(model, seen_dataloader, unseen_dataloader)
 
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
@@ -242,7 +246,6 @@ def main():
     for _, batch in enumerate(seen_dataloader):
         with torch.no_grad():
             outputs = model(**batch)
-
         loss = outputs.loss
         seen_losses.append(accelerator.gather_for_metrics(loss.repeat(args.per_device_eval_batch_size)))
 
