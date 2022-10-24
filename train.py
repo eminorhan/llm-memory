@@ -166,6 +166,8 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name, use_fast=not args.use_slow_tokenizer, model_max_length=2048)  # TODO: pass this more beautifully
     elif args.model_name_or_path:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path, use_fast=not args.use_slow_tokenizer, model_max_length=2048)  # TODO: pass this more beautifully
+        if args.model_name_or_path.startswith("gpt2"):
+            tokenizer.pad_token = tokenizer.eos_token
     else:
         raise ValueError(
             "You are instantiating a new tokenizer from scratch. This is not supported by this script."
