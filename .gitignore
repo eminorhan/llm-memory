@@ -4,7 +4,6 @@
 *.ckpt
 *.jpeg
 *.tar
-*.npz
 *.lock
 *.bin
 
