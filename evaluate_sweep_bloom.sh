@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
 #SBATCH --time=48:00:00
-#SBATCH --job-name=evaluate_sweep_opt
-#SBATCH --output=evaluate_sweep_opt_%A_%a.out
+#SBATCH --job-name=evaluate_sweep_bloom
+#SBATCH --output=evaluate_sweep_bloom_%A_%a.out
 #SBATCH --array=0
 
 module purge
