@@ -26,7 +26,7 @@ do
             SP="bloom_3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
@@ -49,7 +49,7 @@ do
             SP="bloom_1b7_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
@@ -72,7 +72,7 @@ do
             SP="bloom_1b1_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
@@ -95,7 +95,7 @@ do
             SP="bloom_560m${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \

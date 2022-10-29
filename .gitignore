@@ -6,6 +6,7 @@
 *.tar
 *.lock
 *.bin
+*.out
 
 # Directories
 /models
