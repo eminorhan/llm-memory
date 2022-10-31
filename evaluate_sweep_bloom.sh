@@ -25,10 +25,10 @@ do
             SP="bloom_3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-bloom" \
+                --output_dir "evals/expt2-bloom" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -46,10 +46,10 @@ do
             SP="bloom_1b7_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-bloom" \
+                --output_dir "evals/expt2-bloom" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -67,10 +67,10 @@ do
             SP="bloom_1b1_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-bloom" \
+                --output_dir "evals/expt2-bloom" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -85,13 +85,13 @@ do
     do
         for BS in "${BSS[@]}"
         do
-            SP="bloom_560m${EX}_${LR}_${BS}"
+            SP="bloom_560m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-bloom" \
+                --output_dir "evals/expt2-bloom" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache

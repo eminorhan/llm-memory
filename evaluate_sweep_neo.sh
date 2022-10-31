@@ -25,10 +25,10 @@ do
             SP="neo_125m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-neo" \
+                --output_dir "evals/expt2-neo" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -46,10 +46,10 @@ do
             SP="neo_1.3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-neo" \
+                --output_dir "evals/expt2-neo" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -67,10 +67,10 @@ do
             SP="neo_2.7b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-neo" \
+                --output_dir "evals/expt2-neo" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache

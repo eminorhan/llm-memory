@@ -3,9 +3,9 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=48:00:00
-#SBATCH --job-name=evaluate_sweep_opt
-#SBATCH --output=evaluate_sweep_opt_%A_%a.out
+#SBATCH --time=12:00:00
+#SBATCH --job-name=evaluate_sweep_gpt
+#SBATCH --output=evaluate_sweep_gpt_%A_%a.out
 #SBATCH --array=0
 
 module purge
@@ -25,10 +25,10 @@ do
             SP="gpt2_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-gpt" \
+                --output_dir "evals/expt2-gpt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -46,10 +46,10 @@ do
             SP="gpt2_medium_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-gpt" \
+                --output_dir "evals/expt2-gpt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -67,10 +67,10 @@ do
             SP="gpt2_large_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-gpt" \
+                --output_dir "evals/expt2-gpt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -88,10 +88,10 @@ do
             SP="gpt2_xl_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
                 --model_name_or_path "models/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/un${EX}.json" \
+                --seen_file "data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/expt2/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/expt1-gpt" \
+                --output_dir "evals/expt2-gpt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache

@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=48:00:00
+#SBATCH --time=12:00:00
 #SBATCH --job-name=train_sweep_gpt
 #SBATCH --output=train_sweep_gpt_%A_%a.out
 #SBATCH --array=0
@@ -26,10 +26,10 @@ do
             SP="gpt2_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -49,10 +49,10 @@ do
             SP="gpt2_medium_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -72,10 +72,10 @@ do
             SP="gpt2_large_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -95,10 +95,10 @@ do
             SP="gpt2_xl_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file /scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EX}.json \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir /scratch/eo41/lm-recognition-memory/models/${SP} \
+                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
