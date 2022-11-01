@@ -16,7 +16,7 @@ main_process_port: null
 main_training_function: main
 mixed_precision: 'no'
 num_machines: 1
-num_processes: 4
+num_processes: 2
 rdzv_backend: static
 same_network: true
 use_cpu: false
