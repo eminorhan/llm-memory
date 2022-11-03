@@ -11,6 +11,10 @@
 module purge
 module load cuda/11.6.2
 
+# which experiment
+EXPT="expt2"
+
+# grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0003 0.0001 0.00003 0.00001)
 BSS=(1 2 4 8)
@@ -26,7 +30,7 @@ do
             SP="gpt2_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
@@ -49,7 +53,7 @@ do
             SP="gpt2_medium_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
@@ -72,7 +76,7 @@ do
             SP="gpt2_large_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
@@ -95,7 +99,7 @@ do
             SP="gpt2_xl_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/expt2/${EX}.json" \
+                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \

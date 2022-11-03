@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:a100:3
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=360GB
-#SBATCH --time=48:00:00
+#SBATCH --gres=gpu:a100:4
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=492GB
+#SBATCH --time=12:00:00
 #SBATCH --job-name=train_gptj
 #SBATCH --output=train_gptj_%A_%a.out
 #SBATCH --array=0
@@ -16,8 +16,8 @@ EXPT="expt1"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.0001 0.00003 0.00001 0.000003)
-BSS=(1 2)
+LRS=(0.0001 0.00005 0.00003 0.00001)
+BSS=(1 2 3)
 
 # gpt-j-6b
 MO="EleutherAI/gpt-j-6B"
