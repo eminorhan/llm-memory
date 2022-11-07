@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=8:00:00
+#SBATCH --time=4:00:00
 #SBATCH --job-name=evaluate_bloom7b
 #SBATCH --output=evaluate_bloom7b_%A_%a.out
 #SBATCH --array=0
@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt1"
+EXPT="expt3-fixed"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
