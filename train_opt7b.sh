@@ -3,13 +3,13 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=492GB
-#SBATCH --time=12:00:00
-#SBATCH --job-name=train_gptj
-#SBATCH --output=train_gptj_%A_%a.out
+#SBATCH --time=16:00:00
+#SBATCH --job-name=train_opt7b
+#SBATCH --output=train_opt7b_%A_%a.out
 #SBATCH --array=0
 
 module purge
-module load cuda/11.6.2    
+module load cuda/11.6.2
 
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
@@ -21,15 +21,15 @@ EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0001 0.00005 0.00003 0.00001)
 BSS=(1 2 3)
 
-# gpt-j-6b
-MO="EleutherAI/gpt-j-6B"
+# opt-6.7b
+MO="facebook/opt-6.7b"
 for EX in "${EXS[@]}"
 do
     for LR in "${LRS[@]}"
     do
         for BS in "${BSS[@]}"
         do
-            SP="gpt_j_${EX}_${LR}_${BS}"
+            SP="opt_7b_${EX}_${LR}_${BS}"
             accelerate launch --config_file /scratch/eo41/lm-recognition-memory/accelerate_config.yaml --num_cpu_threads_per_process 4 /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
                 --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \

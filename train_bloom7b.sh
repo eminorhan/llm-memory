@@ -11,6 +11,8 @@
 module purge
 module load cuda/11.6.2
 
+export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
+
 # which experiment
 EXPT="expt1"
 
