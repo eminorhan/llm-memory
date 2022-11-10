@@ -16,6 +16,9 @@ export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 # which experiment
 EXPT="expt1"
 
+# root model directory
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
+
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0001 0.00005 0.00003 0.00001)
@@ -32,10 +35,10 @@ do
             SP="opt_7b_${EX}_${LR}_${BS}"
             accelerate launch --config_file /scratch/eo41/lm-recognition-memory/accelerate_config.yaml --num_cpu_threads_per_process 4 /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \

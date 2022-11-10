@@ -16,6 +16,9 @@ export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 # which experiment
 EXPT="expt2"
 
+# root model directory
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
+
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
 LRS=(0.0003 0.0001 0.00003 0.00001)
@@ -32,10 +35,10 @@ do
             SP="opt_2.7b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -55,10 +58,10 @@ do
             SP="opt_1.3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -78,10 +81,10 @@ do
             SP="opt_350m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -101,10 +104,10 @@ do
             SP="opt_125m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "/scratch/eo41/lm-recognition-memory/data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "/scratch/eo41/lm-recognition-memory/models/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
