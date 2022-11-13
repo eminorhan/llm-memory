@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=492GB
-#SBATCH --time=16:00:00
+#SBATCH --time=8:00:00
 #SBATCH --job-name=train_opt7b
 #SBATCH --output=train_opt7b_%A_%a.out
 #SBATCH --array=0
@@ -38,7 +38,7 @@ do
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \

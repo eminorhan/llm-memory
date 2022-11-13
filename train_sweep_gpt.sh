@@ -38,7 +38,7 @@ do
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -61,7 +61,7 @@ do
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -84,7 +84,7 @@ do
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \
@@ -107,7 +107,7 @@ do
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
-                --output_dir "${MODEL_ROOT_DIR}/${SP}" \
+                --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --num_train_epochs 1 \

@@ -31,7 +31,7 @@ do
         do
             SP="neo_125m_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "${MODEL_ROOT_DIR}/${SP}" \
+                --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
@@ -52,7 +52,7 @@ do
         do
             SP="neo_1.3b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "${MODEL_ROOT_DIR}/${SP}" \
+                --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
@@ -73,7 +73,7 @@ do
         do
             SP="neo_2.7b_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-                --model_name_or_path "${MODEL_ROOT_DIR}/${SP}" \
+                --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
