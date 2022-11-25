@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=4:00:00
+#SBATCH --time=48:00:00
 #SBATCH --job-name=evaluate_bloom7b
 #SBATCH --output=evaluate_bloom7b_%A_%a.out
 #SBATCH --array=0
@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt2"
+EXPT="expt5"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
@@ -42,5 +42,20 @@ do
         done
     done
 done
+
+# # bloom-7b initial
+# for EX in "${EXS[@]}"
+# do
+#     SP="bloom_7b_init_${EX}"
+#     python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+#         --model_name_or_path "bigscience/bloom-7b1" \
+#         --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+#         --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+#         --per_device_eval_batch_size 1 \
+#         --output_dir "evals/${EXPT}-bloom7b" \
+#         --save_prefix ${SP} \
+#         --block_size 128 \
+#         --overwrite_cache
+# done
 
 echo "Done"

@@ -14,7 +14,7 @@ module load cuda/11.6.2
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
 # which experiment
-EXPT="expt2"
+EXPT="expt4"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"

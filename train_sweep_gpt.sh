@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=12:00:00
+#SBATCH --time=48:00:00
 #SBATCH --job-name=train_sweep_gpt
 #SBATCH --output=train_sweep_gpt_%A_%a.out
 #SBATCH --array=0
@@ -14,7 +14,7 @@ module load cuda/11.6.2
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
 # which experiment
-EXPT="expt2"
+EXPT="expt4"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"

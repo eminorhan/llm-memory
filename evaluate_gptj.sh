@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=8:00:00
+#SBATCH --time=48:00:00
 #SBATCH --job-name=evaluate_gptj
 #SBATCH --output=evaluate_gptj_%A_%a.out
 #SBATCH --array=0
@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt1"
+EXPT="expt5"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
