@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt5"
+EXPT="expt6"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
@@ -44,18 +44,18 @@ do
 done
 
 # # opt-7b initial
-# for EX in "${EXS[@]}"
-# do
-#     SP="opt_7b_init_${EX}"
-#     python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
-#         --model_name_or_path "facebook/opt-6.7b" \
-#         --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-#         --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
-#         --per_device_eval_batch_size 1 \
-#         --output_dir "evals/${EXPT}-opt7b" \
-#         --save_prefix ${SP} \
-#         --block_size 128 \
-#         --overwrite_cache
-# done
+for EX in "${EXS[@]}"
+do
+    SP="opt_7b_init_${EX}"
+    python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+        --model_name_or_path "facebook/opt-6.7b" \
+        --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+        --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+        --per_device_eval_batch_size 1 \
+        --output_dir "evals/${EXPT}-opt7b" \
+        --save_prefix ${SP} \
+        --block_size 128 \
+        --overwrite_cache
+done
 
 echo "Done"

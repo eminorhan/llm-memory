@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt5"
+EXPT="expt6"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
