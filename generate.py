@@ -223,6 +223,7 @@ def main():
 
     ground_truths = []
     completions = []
+    prompts = []
     for _, batch in enumerate(seen_dataloader):
         with torch.no_grad():
             len_input_tok = len(batch['input_ids'][0])
@@ -231,19 +232,21 @@ def main():
             output_tok = model.generate(**new_batch, max_length=len_input_tok, min_length=len_input_tok, return_dict_in_generate=False, output_scores=False)
             output = tokenizer.decode(output_tok[0], skip_special_tokens=True)
             input = tokenizer.decode(batch['input_ids'][0], skip_special_tokens=True)
+            prompt = tokenizer.decode(new_batch['input_ids'][0], skip_special_tokens=True)
 
             print(input)
             print(output)
 
             ground_truths.append(input)
             completions.append(output)
+            prompts.append(prompt)
 
     results = rouge.compute(predictions=completions, references=ground_truths)
     print('Rouge results:', results)
 
     # save results
     save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
-    np.savez(save_path, ground_truths=ground_truths, completions=completions, results=results)
+    np.savez(save_path, ground_truths=ground_truths, completions=completions, prompts=prompts, results=results)
 
 if __name__ == "__main__":
     main()

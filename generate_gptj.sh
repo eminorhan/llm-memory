@@ -4,15 +4,15 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
 #SBATCH --time=48:00:00
-#SBATCH --job-name=evaluate_gptj
-#SBATCH --output=evaluate_gptj_%A_%a.out
+#SBATCH --job-name=generate_gptj
+#SBATCH --output=generate_gptj_%A_%a.out
 #SBATCH --array=0
 
 module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt6"
+EXPT="expt2"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
@@ -30,12 +30,11 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt_j_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
+            python -u /scratch/eo41/lm-recognition-memory/generate.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/${EXPT}-gptj" \
+                --output_dir "recalls/${EXPT}-gptj" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
