@@ -30,7 +30,7 @@ do
        for BS in "${BSS[@]}"
        do
            SP="opt_7b_${EX}_${LR}_${BS}"
-           python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+           python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
                --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
@@ -47,7 +47,7 @@ done
 for EX in "${EXS[@]}"
 do
     SP="opt_7b_init_${EX}"
-    python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+    python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
         --model_name_or_path "facebook/opt-6.7b" \
         --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
         --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \

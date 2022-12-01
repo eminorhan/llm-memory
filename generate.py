@@ -218,17 +218,32 @@ def main():
 
     model.eval()
 
-    # SEEN examples
+    # generate completions and evaluate
+    rouge = evaluate.load('rouge')
+
     ground_truths = []
     completions = []
     for _, batch in enumerate(seen_dataloader):
         with torch.no_grad():
-            print(batch)
-            
+            len_input_tok = len(batch['input_ids'][0])
+            new_batch = {'input_ids': batch['input_ids'][:, :(len_input_tok//2)], 'attention_mask': batch['attention_mask'][:, :(len_input_tok//2)]}
 
-    # # save results (TODO: change the file name)
-    # save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
-    # np.savez(save_path, seen_losses=seen_losses)
+            output_tok = model.generate(**new_batch, max_length=len_input_tok, min_length=len_input_tok, return_dict_in_generate=False, output_scores=False)
+            output = tokenizer.decode(output_tok[0], skip_special_tokens=True)
+            input = tokenizer.decode(batch['input_ids'][0], skip_special_tokens=True)
+
+            print(input)
+            print(output)
+
+            ground_truths.append(input)
+            completions.append(output)
+
+    results = rouge.compute(predictions=completions, references=ground_truths)
+    print('Rouge results:', results)
+
+    # save results
+    save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
+    np.savez(save_path, ground_truths=ground_truths, completions=completions, results=results)
 
 if __name__ == "__main__":
     main()

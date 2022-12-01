@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:a100:1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=240GB
-#SBATCH --time=00:10:00
+#SBATCH --gres=gpu:v100:1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16GB
+#SBATCH --time=00:15:00
 #SBATCH --job-name=generate
 #SBATCH --output=generate_%A_%a.out
 #SBATCH --array=0

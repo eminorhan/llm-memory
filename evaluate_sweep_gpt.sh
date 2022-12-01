@@ -30,7 +30,7 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+            python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
@@ -51,7 +51,7 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_medium_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+            python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
@@ -72,7 +72,7 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_large_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+            python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
@@ -93,7 +93,7 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_xl_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/evaluate.py \
+            python -u /scratch/eo41/lm-recognition-memory/evaluate_m.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
