@@ -182,8 +182,7 @@ def main():
 
     model.resize_token_embeddings(len(tokenizer))
 
-    # Preprocessing the datasets.
-    # First we tokenize all the texts.
+    # Preprocessing the datasets. First we tokenize all the texts.
     column_names = raw_datasets["train"].column_names
     text_column_name = "text" if "text" in column_names else column_names[0]
 
@@ -221,6 +220,8 @@ def main():
     # Main data processing function.
     def preprocess_function(examples):
         examples["labels"] = examples["input_ids"].copy()
+        # pad token must be set to -100 in labels to make sure it's ignored when comuting the loss
+        examples["labels"] = [[(l if l != tokenizer.pad_token_id else -100) for l in label] for label in examples["labels"]]
         return examples
 
     with accelerator.main_process_first():
@@ -393,6 +394,7 @@ def main():
         train_losses_ckpt = train_losses_ckpt.cpu().numpy()
         logger.info(f"Final mean train loss: {np.mean(train_losses_ckpt)}")
 
+        # save results
         save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
         np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
 

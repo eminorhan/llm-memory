@@ -10,4 +10,5 @@
 
 # Directories
 /models
+/recalls
 **/__pycache__/

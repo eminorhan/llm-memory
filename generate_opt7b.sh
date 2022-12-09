@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:a100:1
+#SBATCH --gres=gpu:rtx8000:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=240GB
+#SBATCH --mem=200GB
 #SBATCH --time=48:00:00
 #SBATCH --job-name=generate_opt7b
 #SBATCH --output=generate_opt7b_%A_%a.out
@@ -12,7 +12,7 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt2"
+EXPT="expt6"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"

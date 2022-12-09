@@ -45,7 +45,7 @@ from transformers import (
     default_data_collator,
 )
 from transformers.utils.versions import require_version
-import evaluate
+
 
 logger = get_logger(__name__)
 
@@ -58,6 +58,7 @@ MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate recognition memory in large language models")
     parser.add_argument("--seen_file", type=str, default=None, help="A csv or a json file containing the seen examples.")
+    parser.add_argument("--unseen_file", type=str, default=None, help="A csv or a json file containing the unseen examples.")
     parser.add_argument("--save_prefix", type=str, default='', help="Informative string for saving purposes")
     parser.add_argument("--model_name_or_path", type=str, help="Path to pretrained model or model identifier from huggingface.co/models.", required=False)
     parser.add_argument("--config_name", type=str, default=None, help="Pretrained config name or path if not the same as model_name")
@@ -75,7 +76,10 @@ def parse_args():
 
     # Sanity checks
     assert args.seen_file is not None, "`seen_file` cannot be None, please provide a valid file of seen examples." 
+    assert args.unseen_file is not None, "`unseen_file` cannot be None, please provide a valid file of unseen examples." 
+
     assert args.seen_file.split(".")[-1] in ["csv", "json", "txt"], "`seen_file` should be a csv, json or txt file."
+    assert args.unseen_file.split(".")[-1] in ["csv", "json", "txt"], "`unseen_file` should be a csv, json or txt file."
 
     return args
 
@@ -119,7 +123,7 @@ def main():
     # 'text' is found. You can easily tweak this behavior (see below).
     #
     # In distributed training, the load_dataset function guarantees that only one local process can concurrently download the dataset.
-    data_files = {"seen": args.seen_file}
+    data_files = {"seen": args.seen_file, "unseen": args.unseen_file}
     dataset_args = {}
     
     extension = args.seen_file.split(".")[-1]
@@ -128,11 +132,8 @@ def main():
         dataset_args["keep_linebreaks"] = not args.no_keep_linebreaks
     raw_datasets = load_dataset(extension, data_files=data_files, **dataset_args)
 
-    # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
-    # https://huggingface.co/docs/datasets/loading_datasets.html.
 
-    # LOAD PRETRAINED MODEL & TOKENIZER
- 
+    # LOAD PRETRAINED MODEL & TOKENIZER 
     # In distributed training, the .from_pretrained methods guarantee that only one local process can concurrently download model & vocab.
     if args.config_name:
         config = AutoConfig.from_pretrained(args.config_name)
@@ -182,8 +183,7 @@ def main():
             block_size = tokenizer.model_max_length
 
     def tokenize_function(examples):
-        # no padding
-        return tokenizer(examples[text_column_name], truncation=True, max_length=block_size)
+        return tokenizer(examples[text_column_name], padding='max_length', truncation=True, max_length=block_size)
 
     with accelerator.main_process_first():
         tokenized_datasets = raw_datasets.map(
@@ -195,18 +195,39 @@ def main():
             desc="Running tokenizer on dataset",
         )
 
-    seen_dataset = tokenized_datasets["seen"]
+    # Main data processing function.
+    def preprocess_function(examples):
+        examples["labels"] = examples["input_ids"].copy()
+        # pad token must be set to -100 in labels to make sure it's ignored when comuting the loss
+        examples["labels"] = [[(l if l != tokenizer.pad_token_id else -100) for l in label] for label in examples["labels"]]
+        return examples
 
-    # Log a few random samples from the seen set:
+    with accelerator.main_process_first():
+        lm_datasets = tokenized_datasets.map(
+            preprocess_function,
+            batched=True,
+            num_proc=args.preprocessing_num_workers,
+            load_from_cache_file=not args.overwrite_cache,
+            desc=f"Not grouping text.",
+        )
+
+    # seen-unseen datasets
+    seen_dataset = lm_datasets["seen"]
+    unseen_dataset = lm_datasets["unseen"]
+
+    # Log a few random pairs from the seen-unseen sets:
     for index in random.sample(range(len(seen_dataset)), 3):
         logger.info(f"Sample {index} of the seen set: {seen_dataset[index]}.")
         logger.info(f"Sample {index} of the seen set (decoded): {tokenizer.decode(seen_dataset[index]['input_ids'], skip_special_tokens=True)}.")
+        logger.info(f"Sample {index} of the unseen set: {unseen_dataset[index]}.")
+        logger.info(f"Sample {index} of the unseen set (decoded): {tokenizer.decode(unseen_dataset[index]['input_ids'], skip_special_tokens=True)}.")
 
-    # dataloader
+    # seen-unseen dataloaders
     seen_dataloader = DataLoader(seen_dataset, shuffle=False, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
+    unseen_dataloader = DataLoader(unseen_dataset, shuffle=False, collate_fn=default_data_collator, batch_size=args.per_device_eval_batch_size)
 
     # Prepare everything with our `accelerator`.
-    model, seen_dataloader = accelerator.prepare(model, seen_dataloader)
+    model, seen_dataloader, unseen_dataloader = accelerator.prepare(model, seen_dataloader, unseen_dataloader)
 
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
@@ -215,39 +236,43 @@ def main():
     logger.info("***** Running evaluation *****")
     logger.info(f"Instantaneous batch size per device = {args.per_device_eval_batch_size}")
     logger.info(f"Seen dataset size = {len(seen_dataset)}")
+    logger.info(f"Unseen dataset size = {len(unseen_dataset)}")
     logger.info(f"Seen loader size = {len(seen_dataloader)}")
+    logger.info(f"Unseen loader size = {len(unseen_dataloader)}")
 
     model.eval()
 
-    # generate completions and evaluate
-    rouge = evaluate.load('rouge')
-
-    ground_truths = []
-    completions = []
-    prompts = []
+    # SEEN examples
+    seen_losses = []
     for _, batch in enumerate(seen_dataloader):
         with torch.no_grad():
-            len_input_tok = len(batch['input_ids'][0])
-            new_batch = {'input_ids': batch['input_ids'][:, :(len_input_tok//2)], 'attention_mask': batch['attention_mask'][:, :(len_input_tok//2)]}
+            outputs = model(**batch)
+            loss = outputs.loss
+            seen_losses.append(accelerator.gather_for_metrics(loss.repeat(args.per_device_eval_batch_size)))
 
-            output_tok = model.generate(**new_batch, max_length=len_input_tok, min_length=len_input_tok, return_dict_in_generate=False, output_scores=False)
-            output = tokenizer.decode(output_tok[0], skip_special_tokens=True)
-            input = tokenizer.decode(batch['input_ids'][0], skip_special_tokens=True)
-            prompt = tokenizer.decode(new_batch['input_ids'][0], skip_special_tokens=True)
+    seen_losses = torch.cat(seen_losses)
+    seen_losses = seen_losses.cpu().numpy()
+    logger.info(f"Evaluated the seen examples. Losses shape = {seen_losses.shape}")
 
-            print(input)
-            print(output)
+    # UNSEEN examples
+    unseen_losses = []
+    for _, batch in enumerate(unseen_dataloader):
+        with torch.no_grad():
+            outputs = model(**batch)
+            loss = outputs.loss
+            unseen_losses.append(accelerator.gather_for_metrics(loss.repeat(args.per_device_eval_batch_size)))
 
-            ground_truths.append(input)
-            completions.append(output)
-            prompts.append(prompt)
+    unseen_losses = torch.cat(unseen_losses)
+    unseen_losses = unseen_losses.cpu().numpy()
+    logger.info(f"Evaluated the unseen examples. Losses shape = {unseen_losses.shape}")
 
-    results = rouge.compute(predictions=completions, references=ground_truths)
-    print('Rouge results:', results)
+    accuracies = seen_losses < unseen_losses
+    mean_accuracy = np.mean(accuracies)
+    logger.info(f"Mean accuracy: {mean_accuracy}")
 
     # save results
     save_path = os.path.join(args.output_dir, args.save_prefix + '_results.npz')
-    np.savez(save_path, ground_truths=ground_truths, completions=completions, prompts=prompts, results=results)
+    np.savez(save_path, seen_losses=seen_losses, unseen_losses=unseen_losses, accuracies=accuracies, mean_accuracy=mean_accuracy)
 
 if __name__ == "__main__":
     main()

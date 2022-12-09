@@ -4,15 +4,15 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
 #SBATCH --time=48:00:00
-#SBATCH --job-name=generate_sweep_opt
-#SBATCH --output=generate_sweep_opt_%A_%a.out
+#SBATCH --job-name=evaluate_sweep_opt
+#SBATCH --output=evaluate_sweep_opt_%A_%a.out
 #SBATCH --array=0
 
 module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt6"
+EXPT="expt1"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
@@ -30,11 +30,12 @@ do
         for BS in "${BSS[@]}"
         do
             SP="opt_2.7b_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/generate.py \
+            python -u /scratch/eo41/lm-recognition-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "recalls/${EXPT}-opt" \
+                --output_dir "evals/${EXPT}-opt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -50,11 +51,12 @@ do
         for BS in "${BSS[@]}"
         do
             SP="opt_1.3b_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/generate.py \
+            python -u /scratch/eo41/lm-recognition-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "recalls/${EXPT}-opt" \
+                --output_dir "evals/${EXPT}-opt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -70,11 +72,12 @@ do
         for BS in "${BSS[@]}"
         do
             SP="opt_350m_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/generate.py \
+            python -u /scratch/eo41/lm-recognition-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "recalls/${EXPT}-opt" \
+                --output_dir "evals/${EXPT}-opt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
@@ -90,11 +93,12 @@ do
         for BS in "${BSS[@]}"
         do
             SP="opt_125m_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/generate.py \
+            python -u /scratch/eo41/lm-recognition-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "recalls/${EXPT}-opt" \
+                --output_dir "evals/${EXPT}-opt" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
