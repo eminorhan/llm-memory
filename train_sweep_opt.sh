@@ -14,15 +14,15 @@ module load cuda/11.6.2
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
 # which experiment
-EXPT="expt1"
+EXPT="expt3"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.0003 0.0001 0.00003 0.00001)
-BSS=(1 2 4 8)
+LRS=(0.0001 0.00003 0.00001)
+BSS=(1 4 16)
 
 # OPT-2.7B
 MO="facebook/opt-2.7b"

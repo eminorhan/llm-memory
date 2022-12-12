@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=492GB
 #SBATCH --time=48:00:00
-#SBATCH --job-name=train_opt7b
-#SBATCH --output=train_opt7b_%A_%a.out
+#SBATCH --job-name=train_opt13b
+#SBATCH --output=train_opt13b_%A_%a.out
 #SBATCH --array=0
 
 module purge
@@ -21,19 +21,19 @@ MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.0001 0.00003 0.00001)
-BSS=(1 2 4)
+LRS=(0.00001)
+BSS=(4)
 
-# opt-6.7b
-MO="facebook/opt-6.7b"
+# opt-13b
+MO="facebook/opt-13b"
 for EX in "${EXS[@]}"
 do
     for LR in "${LRS[@]}"
     do
         for BS in "${BSS[@]}"
         do
-            SP="opt_7b_${EX}_${LR}_${BS}"
-            accelerate launch --config_file /scratch/eo41/lm-recognition-memory/accelerate_config.yaml --num_cpu_threads_per_process 4 /scratch/eo41/lm-recognition-memory/train.py \
+            SP="opt_13b_${EX}_${LR}_${BS}"
+            accelerate launch --config_file /scratch/eo41/lm-recognition-memory/accelerate_config_big.yaml --num_cpu_threads_per_process 4 /scratch/eo41/lm-recognition-memory/train.py \
                 --model_name_or_path ${MO} \
                 --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \

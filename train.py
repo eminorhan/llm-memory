@@ -220,7 +220,7 @@ def main():
     # Main data processing function.
     def preprocess_function(examples):
         examples["labels"] = examples["input_ids"].copy()
-        # pad token must be set to -100 in labels to make sure it's ignored when comuting the loss
+        # pad token must be set to -100 in labels to make sure it's ignored when computing the loss
         examples["labels"] = [[(l if l != tokenizer.pad_token_id else -100) for l in label] for label in examples["labels"]]
         return examples
 
