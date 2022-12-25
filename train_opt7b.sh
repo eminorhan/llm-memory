@@ -14,7 +14,7 @@ module load cuda/11.6.2
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
 # which experiment
-EXPT="expt3"
+EXPT="expt6"
 
 # root model directory
 MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
@@ -41,7 +41,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 1 \
+                --num_train_epochs 2 \
                 --overwrite_cache
         done
     done

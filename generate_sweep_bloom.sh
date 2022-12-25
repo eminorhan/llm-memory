@@ -19,8 +19,8 @@ MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.0003 0.0001 0.00003 0.00001)
-BSS=(1 2 4 8)
+LRS=(0.0001 0.00003 0.00001)
+BSS=(1 4 16)
 
 # bloom-3b
 for EX in "${EXS[@]}"

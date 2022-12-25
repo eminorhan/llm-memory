@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:a100:1
+#SBATCH --gres=gpu:rtx8000:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=240GB
+#SBATCH --mem=200GB
 #SBATCH --time=48:00:00
 #SBATCH --job-name=generate_sweep_opt
 #SBATCH --output=generate_sweep_opt_%A_%a.out
@@ -19,8 +19,8 @@ MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.0003 0.0001 0.00003 0.00001)
-BSS=(1 2 4 8)
+LRS=(0.0001 0.00003 0.00001)
+BSS=(1 4 16)
 
 # OPT-2.7B
 for EX in "${EXS[@]}"
