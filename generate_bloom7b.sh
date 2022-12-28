@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:rtx8000:1
+#SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=200GB
+#SBATCH --mem=240GB
 #SBATCH --time=48:00:00
 #SBATCH --job-name=generate_bloom7b
 #SBATCH --output=generate_bloom7b_%A_%a.out
