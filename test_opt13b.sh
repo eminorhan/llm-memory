@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=240GB
-#SBATCH --time=48:00:00
+#SBATCH --time=08:00:00
 #SBATCH --job-name=evaluate_opt13b
 #SBATCH --output=evaluate_opt13b_%A_%a.out
 #SBATCH --array=0
@@ -17,12 +17,12 @@ export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 EXPT="expt6"
 
 # root model directory
-MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-3"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.00001)
-BSS=(4)
+LRS=(0.00005 0.00001)
+BSS=(1 4)
 
 # opt-13b
 for EX in "${EXS[@]}"

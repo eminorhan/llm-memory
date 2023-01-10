@@ -41,7 +41,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 2 \
+                --num_train_epochs 3 \
                 --overwrite_cache
         done
     done
@@ -64,7 +64,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 2 \
+                --num_train_epochs 3 \
                 --overwrite_cache
         done
     done
@@ -87,7 +87,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 2 \
+                --num_train_epochs 3 \
                 --overwrite_cache
         done
     done

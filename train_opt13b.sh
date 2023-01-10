@@ -21,8 +21,8 @@ MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
-LRS=(0.00001)
-BSS=(4)
+LRS=(0.00005 0.00001)
+BSS=(1 4)
 
 # opt-13b
 MO="facebook/opt-13b"
@@ -41,7 +41,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 2 \
+                --num_train_epochs 3 \
                 --overwrite_cache
         done
     done

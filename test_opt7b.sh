@@ -17,7 +17,7 @@ export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 EXPT="expt6"
 
 # root model directory
-MODEL_ROOT_DIR="/vast/eo41/llm-memory/models"
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-3"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
