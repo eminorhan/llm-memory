@@ -6,7 +6,7 @@
 #SBATCH --time=01:00:00
 #SBATCH --job-name=retrain_gptj
 #SBATCH --output=retrain_gptj_%A_%a.out
-#SBATCH --array=0-11
+#SBATCH --array=0-15
 
 module purge
 module load cuda/11.6.2    
@@ -16,8 +16,8 @@ MODEL_ROOT_DIR="/scratch/eo41/llm-memory/models"
 OUTPUT_DIR="/vast/eo41/llm-memory/retrain"
 
 # grid
-EXES=("expt1" "expt1" "expt1" "expt1" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
-DATAS=("data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3")
+EXES=("expt1" "expt1" "expt1" "expt1" "expt3" "expt3" "expt3" "expt3" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
+DATAS=("data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3")
 
 EX=${EXES[$SLURM_ARRAY_TASK_ID]}
 DATA=${DATAS[$SLURM_ARRAY_TASK_ID]}
