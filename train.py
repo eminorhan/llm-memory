@@ -324,6 +324,7 @@ def main():
     completed_steps = starting_epoch * num_update_steps_per_epoch
 
     train_losses = []
+    train_losses_all = []
 
     for epoch in range(starting_epoch, args.num_train_epochs):
         model.train()
@@ -341,6 +342,7 @@ def main():
                 loss = outputs.loss
                 # keep track of the loss at each epoch
                 train_losses.append(loss.detach().unsqueeze(0))
+                train_losses_all.append(loss.detach().unsqueeze(0))
                 accelerator.backward(loss)
                 optimizer.step()
                 optimizer.zero_grad()
@@ -355,15 +357,28 @@ def main():
                     output_dir = f"step_{completed_steps}"
                     if args.output_dir is not None:
                         output_dir = os.path.join(args.output_dir, output_dir)
-                    accelerator.save_state(output_dir)
+
+                    # save model and tokenizer
+                    accelerator.wait_for_everyone()
+                    unwrapped_model = accelerator.unwrap_model(model)
+                    unwrapped_model.save_pretrained(output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save)
+                    if accelerator.is_main_process:
+                        tokenizer.save_pretrained(output_dir)
 
                     # save train_losses
                     train_losses_ckpt = torch.cat(train_losses)
                     train_losses_ckpt = train_losses_ckpt.cpu().numpy()
+
+                    train_losses_all_ckpt = torch.cat(train_losses_all)
+                    train_losses_all_ckpt = train_losses_all_ckpt.cpu().numpy()
+
                     logger.info(f"Mean train loss: {np.mean(train_losses_ckpt)}")
 
-                    save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
-                    np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
+                    save_path = os.path.join(output_dir, 'train_losses.npz')
+                    np.savez(save_path, train_losses=train_losses_all_ckpt, completed_steps=completed_steps)
+
+                    # re-initialize losses
+                    train_losses = []
 
             if completed_steps >= args.max_train_steps:
                 break
@@ -382,7 +397,8 @@ def main():
             save_path = os.path.join(output_dir, args.save_prefix + '_results.npz')
             np.savez(save_path, train_losses_ckpt=train_losses_ckpt, completed_steps=completed_steps)
 
-    if args.output_dir is not None:
+    if args.checkpointing_steps is None and args.output_dir is not None:
+        # save model and tokenizer
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save)
