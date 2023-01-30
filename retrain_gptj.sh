@@ -3,17 +3,18 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=364GB
-#SBATCH --time=01:00:00
+#SBATCH --time=1:00:00
 #SBATCH --job-name=retrain_gptj
 #SBATCH --output=retrain_gptj_%A_%a.out
-#SBATCH --array=0-15
+#SBATCH --array=8-11
 
 module purge
 module load cuda/11.6.2    
 
 # root model directory
-MODEL_ROOT_DIR="/scratch/eo41/llm-memory/models"
-OUTPUT_DIR="/vast/eo41/llm-memory/retrain"
+# MODEL_ROOT_DIR="/scratch/eo41/llm-memory/models"
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-3/expt5"
+OUTPUT_DIR="/vast/eo41/llm-memory/retrain_rec"
 
 # grid
 EXES=("expt1" "expt1" "expt1" "expt1" "expt3" "expt3" "expt3" "expt3" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
