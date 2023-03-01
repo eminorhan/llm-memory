@@ -58,6 +58,7 @@ MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 
 
 def parse_args():
+
     parser = argparse.ArgumentParser(description="Finetune large language models on causal language modeling tasks")
     parser.add_argument("--dataset_name", type=str, default=None, help="The name of the dataset to use (via the datasets library).")
     parser.add_argument("--dataset_config_name", type=str, default=None, help="The configuration name of the dataset to use (via the datasets library).")
@@ -82,6 +83,7 @@ def parse_args():
     parser.add_argument("--checkpointing_steps", type=str, default=None, help="Whether the various states should be saved at the end of every n steps, or 'epoch' for each epoch.")
     parser.add_argument("--resume_from_checkpoint", type=str, default=None, help="If the training should continue from a checkpoint folder.")
     parser.add_argument("--save_prefix", type=str, default='', help="Informative string prefix for saving purposes.")
+    parser.add_argument("--use_pretrained_weights", type=bool, default=True, help="Whether to use pretrained weights.")
 
     args = parser.parse_args()
 
@@ -174,7 +176,7 @@ def main():
             "You can do it from another script, save it, and load it from here, using --tokenizer_name."
         )
 
-    if args.model_name_or_path:
+    if args.model_name_or_path and args.use_pretrained_weights:
         model = AutoModelForCausalLM.from_pretrained(args.model_name_or_path, from_tf=bool(".ckpt" in args.model_name_or_path), config=config)
     else:
         logger.info("Training new model from scratch")
@@ -202,6 +204,7 @@ def main():
                 f"({tokenizer.model_max_length}). Using block_size={tokenizer.model_max_length}."
             )
             block_size = tokenizer.model_max_length
+    print('BLock size:', block_size)
 
     def tokenize_function(examples):
         return tokenizer(examples[text_column_name], padding='max_length', truncation=True, max_length=block_size)

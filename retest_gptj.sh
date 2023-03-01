@@ -6,7 +6,7 @@
 #SBATCH --time=48:00:00
 #SBATCH --job-name=retest_gptj
 #SBATCH --output=retest_gptj_%A_%a.out
-#SBATCH --array=1-23
+#SBATCH --array=12-15
 
 module purge
 module load cuda/11.6.2
@@ -16,7 +16,7 @@ MODEL_ROOT_DIR="/vast/eo41/llm-memory/retrain"
 
 # grid
 EXPTS=("expt1" "expt1" "expt1" "expt1" "expt2" "expt2" "expt2" "expt2" "expt3" "expt3" "expt3" "expt3" "expt4" "expt4" "expt4" "expt4" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
-EXES=("expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt3" "expt3" "expt3" "expt3" "expt3" "expt3" "expt3" "expt3" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
+EXES=("expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt1" "expt3" "expt3" "expt3" "expt3" "expt5" "expt5" "expt5" "expt5" "expt5" "expt5" "expt5" "expt5" "expt6" "expt6" "expt6" "expt6")
 DATAS=("data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3" "data_0" "data_1" "data_2" "data_3")
 STEPS=(1 2 3 4 5 6 7 8 9 10 20 30 40 50 60 70 80 90 100 1000 2000 3000 4000 5000 6000 7000 8000 9000 10000 100000)
 
@@ -37,7 +37,7 @@ do
         --seen_file "data/recognition-memory-experimental-data/${EXPT}/seen_${DATA}.json" \
         --unseen_file "data/recognition-memory-experimental-data/${EXPT}/unseen_${DATA}.json" \
         --per_device_eval_batch_size 1 \
-        --output_dir "retests/${EXPT}-${DATA}" \
+        --output_dir "re-evals/${EXPT}-${DATA}" \
         --save_prefix ${SP} \
         --block_size 128 \
         --overwrite_cache

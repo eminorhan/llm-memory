@@ -34,7 +34,7 @@ accelerate launch --config_file /scratch/eo41/llm-memory/accelerate_config.yaml 
     --output_dir "${OUTPUT_DIR}/gptj_${EX}_shot3_${DATA}" \
     --block_size 128 \
     --num_train_epochs 1 \
-    --checkpointing_steps 1 \
+    --checkpointing_steps 10 \
     --overwrite_cache
 
 echo "Done"
