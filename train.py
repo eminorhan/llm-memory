@@ -26,6 +26,7 @@ import logging
 import math
 import os
 import random
+from itertools import chain
 
 import datasets
 import torch
@@ -192,7 +193,7 @@ def main():
         block_size = tokenizer.model_max_length
         if block_size > 1024:
             logger.warning(
-                f"The tokenizer picked seems to have a very large `model_max_length` ({tokenizer.model_max_length}). "
+                f"The tokenizer picked seems to have a very large `model_max_length` ({tokenizer.model_max_length})."
                 "Picking 1024 instead. You can change that default value by passing --block_size xxx."
             )
             block_size = 1024
@@ -204,14 +205,18 @@ def main():
                 f"({tokenizer.model_max_length}). Using block_size={tokenizer.model_max_length}."
             )
             block_size = tokenizer.model_max_length
-    print('BLock size:', block_size)
+    print('Block size:', block_size)
 
+    # TODO: revert this back later on
     def tokenize_function(examples):
         return tokenizer(examples[text_column_name], padding='max_length', truncation=True, max_length=block_size)
 
+    def tokenize_function_original(examples):
+        return tokenizer(examples[text_column_name])
+
     with accelerator.main_process_first():
         tokenized_datasets = raw_datasets.map(
-            tokenize_function,
+            tokenize_function_original,
             batched=True,
             num_proc=args.preprocessing_num_workers,
             remove_columns=column_names,
@@ -220,6 +225,7 @@ def main():
         )
 
     # TODO: Might have to change this to group_text as in the original example
+    # TODO: revert this back later on
     # Main data processing function.
     def preprocess_function(examples):
         examples["labels"] = examples["input_ids"].copy()
@@ -227,9 +233,25 @@ def main():
         examples["labels"] = [[(l if l != tokenizer.pad_token_id else -100) for l in label] for label in examples["labels"]]
         return examples
 
+    def preprocess_function_original(examples):
+        # Concatenate all texts.
+        concatenated_examples = {k: list(chain(*examples[k])) for k in examples.keys()}
+        total_length = len(concatenated_examples[list(examples.keys())[0]])
+        # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
+        # customize this part to your needs.
+        if total_length >= block_size:
+            total_length = (total_length // block_size) * block_size
+        # Split by chunks of max_len.
+        result = {
+            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
+            for k, t in concatenated_examples.items()
+        }
+        result["labels"] = result["input_ids"].copy()
+        return result
+    
     with accelerator.main_process_first():
         lm_datasets = tokenized_datasets.map(
-            preprocess_function,
+            preprocess_function_original,
             batched=True,
             num_proc=args.preprocessing_num_workers,
             load_from_cache_file=not args.overwrite_cache,
