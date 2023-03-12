@@ -3,13 +3,13 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=492GB
-#SBATCH --time=48:00:00
+#SBATCH --time=3:00:00
 #SBATCH --job-name=train_gptj
 #SBATCH --output=train_gptj_%A_%a.out
 #SBATCH --array=0
 
 module purge
-module load cuda/11.3.1    
+module load cuda/11.6.2    
 
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 

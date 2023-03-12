@@ -216,7 +216,7 @@ def main():
 
     with accelerator.main_process_first():
         tokenized_datasets = raw_datasets.map(
-            tokenize_function_original,
+            tokenize_function,
             batched=True,
             num_proc=args.preprocessing_num_workers,
             remove_columns=column_names,
@@ -251,7 +251,7 @@ def main():
     
     with accelerator.main_process_first():
         lm_datasets = tokenized_datasets.map(
-            preprocess_function_original,
+            preprocess_function,
             batched=True,
             num_proc=args.preprocessing_num_workers,
             load_from_cache_file=not args.overwrite_cache,
