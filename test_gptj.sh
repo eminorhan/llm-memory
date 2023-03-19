@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#SBATCH --gres=gpu:rtx8000:1
+#SBATCH --gres=gpu:a100:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=200GB
-#SBATCH --time=48:00:00
+#SBATCH --time=4:00:00
 #SBATCH --job-name=evaluate_gptj
 #SBATCH --output=evaluate_gptj_%A_%a.out
 #SBATCH --array=0
@@ -30,12 +30,12 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt_j_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/test.py \
+            python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "evals/${EXPT}-gptj" \
+                --output_dir "scratch-evals/${EXPT}-gptj-3" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache

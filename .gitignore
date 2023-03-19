@@ -12,4 +12,6 @@
 /models
 /recalls
 /re-recalls
+/scratch-recalls
+/scratch-re-recalls
 **/__pycache__/

@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:a100:4
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=492GB
-#SBATCH --time=3:00:00
+#SBATCH --time=6:00:00
 #SBATCH --job-name=train_gptj
 #SBATCH --output=train_gptj_%A_%a.out
 #SBATCH --array=0
@@ -14,10 +14,10 @@ module load cuda/11.6.2
 export TRANSFORMERS_CACHE="/vast/eo41/huggingface"
 
 # which experiment
-EXPT="expt1"
+EXPT="expt6"
 
 # root model directory
-MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-1"
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-3"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
@@ -64,7 +64,7 @@ do
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --save_prefix ${SP} \
                 --block_size 128 \
-                --num_train_epochs 1 \
+                --num_train_epochs 3 \
                 --overwrite_cache
         done
     done

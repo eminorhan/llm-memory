@@ -12,10 +12,10 @@ module purge
 module load cuda/11.6.2
 
 # which experiment
-EXPT="expt6"
+EXPT="expt1"
 
 # root model directory
-MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-3"
+MODEL_ROOT_DIR="/vast/eo41/llm-memory/models/shot-1"
 
 # grid
 EXS=("seen_data_0" "seen_data_1" "seen_data_2" "seen_data_3")
@@ -30,11 +30,11 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt_j_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/generate.py \
+            python -u /scratch/eo41/llm-memory/generate.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
                 --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
                 --per_device_eval_batch_size 1 \
-                --output_dir "recalls/${EXPT}-gptj" \
+                --output_dir "scratch-recalls/shot-1/${EXPT}-gptj" \
                 --save_prefix ${SP} \
                 --block_size 128 \
                 --overwrite_cache
