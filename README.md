@@ -9,7 +9,7 @@ The repository contains three Python files [`train.py`](https://github.com/emino
 Some usage examples for these files are given below.
 
 * Finetune a `gpt-j-6B` model with the study sentences in `seen_data_0.json` for 1 epoch (1 exposure) on 4 GPUs (with a total batch size of 4x4=16) using the huggingface accelerate framework:
-```shell
+```python
 accelerate launch --config_file accelerate_config.yaml --num_cpu_threads_per_process 4 train.py \
     --model_name_or_path "EleutherAI/gpt-j-6B" \
     --train_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
@@ -23,7 +23,7 @@ accelerate launch --config_file accelerate_config.yaml --num_cpu_threads_per_pro
 ```
 
 * Run a recognition test on a model with the study sentences in `seen_data_0.json` and foils in `unseen_data_0.json`:
-```shell
+```python
 python -u test.py \
     --model_name_or_path MODEL_PATH \
     --seen_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
@@ -36,7 +36,7 @@ python -u test.py \
 ```
 
 * Run a recall test with a model with the study sentences in `seen_data_0.json`:
-```shell
+```python
 python -u generate.py \
     --model_name_or_path MODEL_PATH \
     --seen_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
