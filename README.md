@@ -6,6 +6,8 @@ Orhan AE (2023) [Recognition, recall, and retention of few-shot memories in larg
 
 The repository contains three Python files [`train.py`](https://github.com/eminorhan/llm-memory/blob/master/train.py), [`test.py`](https://github.com/eminorhan/llm-memory/blob/master/test.py), [`generate.py`](https://github.com/eminorhan/llm-memory/blob/master/generate.py) (all modified from the Huggingface causal language modeling example [here](https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py)) to train (or finetune) a model, to run a recognition test, and to run a recall test, respectively.   
 
+### Usage examples
+
 Some usage examples for these files are given below.
 
 * Finetune a `gpt-j-6B` model with the study sentences in `seen_data_0.json` for 1 epoch (1 exposure) on 4 GPUs (with a total batch size of 4x4=16 sentences) using the Huggingface Accelerate framework (see the example config file [here](https://github.com/eminorhan/llm-memory/blob/master/accelerate_config.yaml)):
@@ -47,4 +49,6 @@ python -u generate.py \
     --overwrite_cache
 ```
 
-The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for replicating all experiments reported in the paper, using these three files. 
+### Reproduction
+
+The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for reproducing all experiments reported in the paper, using these three files. 
