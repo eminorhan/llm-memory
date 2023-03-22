@@ -1,4 +1,4 @@
-# Recognition, recall, and retention of few-shot memories in large language models
+## Recognition, recall, and retention of few-shot memories in large language models
 
 This repository contains the code for reproducing the results reported in the following paper:
 
@@ -8,7 +8,7 @@ The repository contains three Python files [`train.py`](https://github.com/emino
 
 Some usage examples for these files are given below.
 
-* Finetune a `gpt-j-6B` model with the study sentences in `seen_data_0.json` for 1 epoch (1 exposure) on 4 GPUs (with a total batch size of 4x4=16) using the huggingface accelerate framework:
+* Finetune a `gpt-j-6B` model with the study sentences in `seen_data_0.json` for 1 epoch (1 exposure) on 4 GPUs (with a total batch size of 4x4=16 sentences) using the Huggingface Accelerate framework (see the example config file [here](https://github.com/eminorhan/llm-memory/blob/master/accelerate_config.yaml)):
 ```python
 accelerate launch --config_file accelerate_config.yaml --num_cpu_threads_per_process 4 train.py \
     --model_name_or_path "EleutherAI/gpt-j-6B" \
