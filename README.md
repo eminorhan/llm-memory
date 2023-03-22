@@ -1,4 +1,4 @@
-## Recognition, recall, and retention of few-shot memories in large language models
+## Recognition, recall, and retention of few-shot memories in LLMs
 
 This repository contains the code for reproducing the results reported in the following paper:
 
