@@ -51,4 +51,4 @@ python -u generate.py \
 
 ### Reproduction
 
-The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for reproducing all experiments reported in the paper, using these three files. The [`data`](https://github.com/eminorhan/llm-memory/tree/master/data) folder contains all the data used in the experiments.
+The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for reproducing all experiments reported in the paper, using these three files. The [`data`](https://github.com/eminorhan/llm-memory/tree/master/data) folder contains all the data used in the experiments. The [`utils`](https://github.com/eminorhan/llm-memory/tree/master/utils) folder contains utility functions that were used to generate the generate the experimental data. The results of all recognition, recall, and retention experiments reported in the paper are available from [this](https://huggingface.co/datasets/eminorhan/llm-memory) Huggingface dataset repository.

@@ -9,7 +9,6 @@
 *.out
 
 # Directories
-/models
 /recalls
 /re-recalls
 /scratch-recalls
