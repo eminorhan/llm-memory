@@ -14,7 +14,7 @@ Some usage examples for these files are given below.
 ```python
 accelerate launch --config_file accelerate_config.yaml --num_cpu_threads_per_process 4 train.py \
     --model_name_or_path "EleutherAI/gpt-j-6B" \
-    --train_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
+    --train_file "data/llm-experiment-data/expt1/seen_data_0.json" \
     --per_device_train_batch_size 4 \
     --learning_rate 0.00001 \
     --output_dir OUTPUT_DIR \
@@ -28,8 +28,8 @@ accelerate launch --config_file accelerate_config.yaml --num_cpu_threads_per_pro
 ```python
 python -u test.py \
     --model_name_or_path MODEL_PATH \
-    --seen_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
-    --unseen_file "data/recognition-memory-experimental-data/expt1/unseen_data_0.json" \
+    --seen_file "data/llm-experiment-data/expt1/seen_data_0.json" \
+    --unseen_file "data/llm-experiment-data/expt1/unseen_data_0.json" \
     --per_device_eval_batch_size 1 \
     --output_dir OUTPUT_DIR \
     --save_prefix INFORMATIVE_SAVE_PREFIX \
@@ -41,7 +41,7 @@ python -u test.py \
 ```python
 python -u generate.py \
     --model_name_or_path MODEL_PATH \
-    --seen_file "data/recognition-memory-experimental-data/expt1/seen_data_0.json" \
+    --seen_file "data/llm-experiment-data/expt1/seen_data_0.json" \
     --per_device_eval_batch_size 1 \
     --output_dir OUTPUT_DIR \
     --save_prefix INFORMATIVE_SAVE_PREFIX \
@@ -51,4 +51,4 @@ python -u generate.py \
 
 ### Reproduction
 
-The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for reproducing all experiments reported in the paper, using these three files. 
+The [`scripts`](https://github.com/eminorhan/llm-memory/tree/master/scripts) folder contains SLURM scripts for reproducing all experiments reported in the paper, using these three files. The [`data`](https://github.com/eminorhan/llm-memory/tree/master/data) folder contains all the data used in the experiments.
