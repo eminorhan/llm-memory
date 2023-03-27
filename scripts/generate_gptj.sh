@@ -32,7 +32,7 @@ do
             SP="gpt_j_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/llm-memory/generate.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "scratch-recalls/shot-1/${EXPT}-gptj" \
                 --save_prefix ${SP} \

@@ -30,7 +30,7 @@ do
     SP="gptj_step_${STEP}"
     python -u /scratch/eo41/llm-memory/generate.py \
         --model_name_or_path "${MODEL_ROOT_DIR}/gptj_${EX}_shot3_${DATA}/step_${STEP}" \
-        --seen_file "data/recognition-memory-experimental-data/${EX}/seen_${DATA}.json" \
+        --seen_file "data/llm-experiment-data/${EX}/seen_${DATA}.json" \
         --per_device_eval_batch_size 1 \
         --output_dir "scratch-re-recalls/${EX}-${DATA}" \
         --save_prefix ${SP} \

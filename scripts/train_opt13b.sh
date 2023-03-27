@@ -33,9 +33,9 @@ do
         for BS in "${BSS[@]}"
         do
             SP="opt_13b_${EX}_${LR}_${BS}"
-            accelerate launch --config_file /scratch/eo41/lm-recognition-memory/accelerate_config_big.yaml --num_cpu_threads_per_process 4 /scratch/eo41/lm-recognition-memory/train.py \
+            accelerate launch --config_file /scratch/eo41/llm-memory/accelerate_config_big.yaml --num_cpu_threads_per_process 4 /scratch/eo41/llm-memory/train.py \
                 --model_name_or_path ${MO} \
-                --train_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+                --train_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
                 --per_device_train_batch_size ${BS} \
                 --learning_rate ${LR} \
                 --output_dir "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \

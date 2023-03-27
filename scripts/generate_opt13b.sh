@@ -30,9 +30,9 @@ do
        for BS in "${BSS[@]}"
        do
            SP="opt_13b_${EX}_${LR}_${BS}"
-           python -u /scratch/eo41/lm-recognition-memory/generate.py \
+           python -u /scratch/eo41/llm-memory/generate.py \
                --model_name_or_path "${MODEL_ROOT_DIR}/${EXPT}/${SP}" \
-               --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
+               --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
                --per_device_eval_batch_size 1 \
                --output_dir "recalls/${EXPT}-opt13b-3" \
                --save_prefix ${SP} \

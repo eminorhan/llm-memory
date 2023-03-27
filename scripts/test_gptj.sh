@@ -32,8 +32,8 @@ do
             SP="gpt_j_${EX}_${LR}_${BS}"
             python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "scratch-evals/${EXPT}-gptj-3" \
                 --save_prefix ${SP} \

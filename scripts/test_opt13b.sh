@@ -32,10 +32,10 @@ do
        for BS in "${BSS[@]}"
        do
            SP="opt_13b_${EX}_${LR}_${BS}"
-           python -u /scratch/eo41/lm-recognition-memory/test.py \
+           python -u /scratch/eo41/llm-memory/test.py \
                --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-               --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-               --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+               --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+               --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                --per_device_eval_batch_size 1 \
                --output_dir "evals/${EXPT}-opt13b" \
                --save_prefix ${SP} \
@@ -49,10 +49,10 @@ done
 # for EX in "${EXS[@]}"
 # do
 #     SP="opt_13b_init_${EX}"
-#     python -u /scratch/eo41/lm-recognition-memory/test.py \
+#     python -u /scratch/eo41/llm-memory/test.py \
 #         --model_name_or_path "facebook/opt-13b" \
-#         --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-#         --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+#         --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+#         --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
 #         --per_device_eval_batch_size 1 \
 #         --output_dir "evals/${EXPT}-opt13b" \
 #         --save_prefix ${SP} \

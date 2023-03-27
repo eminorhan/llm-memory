@@ -34,8 +34,8 @@ do
     SP="gptj_step_${STEP}"
     python -u /scratch/eo41/llm-memory/test.py \
         --model_name_or_path "${MODEL_ROOT_DIR}/gptj_${EX}_shot3_${DATA}/step_${STEP}" \
-        --seen_file "data/recognition-memory-experimental-data/${EXPT}/seen_${DATA}.json" \
-        --unseen_file "data/recognition-memory-experimental-data/${EXPT}/unseen_${DATA}.json" \
+        --seen_file "data/llm-experiment-data/${EXPT}/seen_${DATA}.json" \
+        --unseen_file "data/llm-experiment-data/${EXPT}/unseen_${DATA}.json" \
         --per_device_eval_batch_size 1 \
         --output_dir "scratch-re-evals/${EXPT}-${DATA}" \
         --save_prefix ${SP} \

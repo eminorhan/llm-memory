@@ -30,10 +30,10 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/test.py \
+            python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/${EXPT}-gpt" \
                 --save_prefix ${SP} \
@@ -51,10 +51,10 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_medium_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/test.py \
+            python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/${EXPT}-gpt" \
                 --save_prefix ${SP} \
@@ -72,10 +72,10 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_large_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/test.py \
+            python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/${EXPT}-gpt" \
                 --save_prefix ${SP} \
@@ -93,10 +93,10 @@ do
         for BS in "${BSS[@]}"
         do
             SP="gpt2_xl_${EX}_${LR}_${BS}"
-            python -u /scratch/eo41/lm-recognition-memory/test.py \
+            python -u /scratch/eo41/llm-memory/test.py \
                 --model_name_or_path "${MODEL_ROOT_DIR}/expt6/${SP}" \
-                --seen_file "data/recognition-memory-experimental-data/${EXPT}/${EX}.json" \
-                --unseen_file "data/recognition-memory-experimental-data/${EXPT}/un${EX}.json" \
+                --seen_file "data/llm-experiment-data/${EXPT}/${EX}.json" \
+                --unseen_file "data/llm-experiment-data/${EXPT}/un${EX}.json" \
                 --per_device_eval_batch_size 1 \
                 --output_dir "evals/${EXPT}-gpt" \
                 --save_prefix ${SP} \

@@ -1,7 +1,9 @@
 #!/bin/bash
 
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:a100:4
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=492GB
 #SBATCH --time=48:00:00
 #SBATCH --job-name=train_gptj_from_scratch
@@ -20,7 +22,7 @@ BS=4  # batch size
 MO="EleutherAI/gpt-j-6B"  # model architecture
 SP="gpt_j_scratch_wikitext103"  # save identifier
 
-accelerate launch --config_file /scratch/eo41/llm-memory/accelerate_config.yaml --num_cpu_threads_per_process 4 /scratch/eo41/llm-memory/train.py \
+accelerate launch --config_file /scratch/eo41/llm-memory/accelerate_config_big.yaml --num_cpu_threads_per_process 8 /scratch/eo41/llm-memory/train.py \
     --model_name_or_path ${MO} \
     --use_pretrained_weights False \
     --dataset_name wikitext \
