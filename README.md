@@ -2,7 +2,7 @@
 
 This repository contains the code for reproducing the results reported in the following paper:
 
-Orhan AE (2023) [Recognition, recall, and retention of few-shot memories in large language models.](https://arxiv.org/abs/2303.xxxxx) arXiv:2303.xxxxx.
+Orhan AE (2023) [Recognition, recall, and retention of few-shot memories in large language models.](https://arxiv.org/abs/2303.17557) arXiv:2303.17557.
 
 The repository contains three Python files [`train.py`](https://github.com/eminorhan/llm-memory/blob/master/train.py), [`test.py`](https://github.com/eminorhan/llm-memory/blob/master/test.py), [`generate.py`](https://github.com/eminorhan/llm-memory/blob/master/generate.py) (all modified from the Huggingface causal language modeling example [here](https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py)) to train (or finetune) a model, to run a recognition test, and to run a recall test, respectively.   
 
